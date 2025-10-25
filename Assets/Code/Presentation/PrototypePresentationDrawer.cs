@@ -9,6 +9,7 @@ namespace Code.Presentation
     internal sealed class PrototypePresentationDrawer
     {
         private readonly GameManager _gameManager;
+        private byte[] _currentSavedSessionBlob;
 
         public PrototypePresentationDrawer(GameManager gameManager)
         {
@@ -17,6 +18,19 @@ namespace Code.Presentation
 
         internal void OnGUI()
         {
+            if (_gameManager.CurrentGameSession != null)
+            {
+                if (GUILayout.Button("Save"))
+                {
+                    _currentSavedSessionBlob = _gameManager.CurrentGameSession.Serialize();
+                }
+            }
+
+            if (_currentSavedSessionBlob != null && GUILayout.Button("Load"))
+            {
+                _gameManager.StartOrRestartGame(_currentSavedSessionBlob);
+            }
+
             if (_gameManager.CurrentGameSession == null)
             {
                 if (GUILayout.Button("Start"))
@@ -31,7 +45,7 @@ namespace Code.Presentation
                     _gameManager.StopGame();
                     return;
                 }
-                
+
                 GUILayout.BeginHorizontal();
                 for (var row = 0; row < _gameManager.CurrentGameSession.Rows; row++)
                 {
@@ -47,8 +61,10 @@ namespace Code.Presentation
                                 _gameManager.CurrentGameSession.OnInput(new BoardLocation(row, column));
                         }
                     }
+
                     GUILayout.EndVertical();
                 }
+
                 GUILayout.EndHorizontal();
             }
         }

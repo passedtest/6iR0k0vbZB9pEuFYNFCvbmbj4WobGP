@@ -13,7 +13,7 @@ namespace Code.State
         public readonly int Columns;
 
         private readonly BoardCellState[,] _internalState;
-        
+
         public BoardState(BoardCellState[,] state)
         {
             _internalState = state ?? throw new ArgumentNullException(nameof(state));
@@ -29,16 +29,6 @@ namespace Code.State
                     $"Invalid cell address r:{row} c:{column}. Coordinates must in the following range: [0, {Rows - 1}] for rows and [0, {Columns - 1}] for columns.");
 
             return ref _internalState[row, column];
-        }
-
-        public void Save()
-        {
-            throw new NotImplementedException();
-        }
-
-        public static BoardState Load()
-        {
-            throw new NotImplementedException();
         }
     }
 }

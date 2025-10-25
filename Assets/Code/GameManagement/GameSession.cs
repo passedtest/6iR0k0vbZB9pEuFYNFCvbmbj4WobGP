@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Code.State;
+using Code.State.Serialization;
 using UnityEngine;
 
 namespace Code.GameManagement
@@ -24,6 +25,13 @@ namespace Code.GameManagement
         private static readonly System.Random _randomSource = new();
 
         /// <summary>
+        /// Declaring the global serialization strategy.
+        /// NOTE that serialization strategy has to be stateless.
+        /// </summary>
+        private static readonly IBoardSerializationStrategy serializationStrategy =
+            new DefaultBoardSerializationStrategy();
+
+        /// <summary>
         /// Current board rows.
         /// </summary>
         public int Rows => _boardState.Rows;
@@ -36,7 +44,10 @@ namespace Code.GameManagement
         private readonly BoardState _boardState;
         private BoardLocation? _currentSelectedLocation;
 
-        public GameSession(int rows, int columns)
+        /// <summary>
+        /// Initialize a new game session with explicit rows/columns arguments.
+        /// </summary>
+        internal GameSession(int rows, int columns)
         {
             if (rows < MIN_ROWS || rows > MAX_ROWS || columns < MIN_COLUMNS || columns > MAX_COLUMNS)
                 throw new IndexOutOfRangeException(
@@ -86,6 +97,12 @@ namespace Code.GameManagement
         }
 
         /// <summary>
+        /// Initialize a new game session from the binary blob using <see cref="IBoardSerializationStrategy"/> implementation.
+        /// </summary>
+        internal GameSession(byte[] bytes) =>
+            _boardState = serializationStrategy.Deserialize(bytes);
+
+        /// <summary>
         /// This basically represent the user input from the UI.
         /// </summary>
         /// <param name="externalInput"></param>
@@ -116,7 +133,7 @@ namespace Code.GameManagement
                     if (state0.Type == state1.Type)
                     {
                         // Match!
-                        
+
                         // Mark state as resolved.
                         state0.IsResolved = true;
                         state1.IsResolved = true;
@@ -138,5 +155,12 @@ namespace Code.GameManagement
 
         public ref BoardCellState GetState(int row, int column) =>
             ref _boardState.GetStateRef(row, column);
+
+        /// <summary>
+        /// Saves the session sate as binary blob, using see <see cref="IBoardSerializationStrategy"/> implmenetation.
+        /// </summary>
+        /// <returns></returns>
+        public byte[] Serialize() =>
+            serializationStrategy.Serialize(_boardState);
     }
 }

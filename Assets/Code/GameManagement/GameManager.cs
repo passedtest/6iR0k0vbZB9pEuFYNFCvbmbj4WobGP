@@ -12,7 +12,12 @@ namespace Code.GameManagement
         {
             CurrentGameSession = new GameSession(rows: 5, columns: 6);
         }
-        
+
+        public void StartOrRestartGame(byte[] blob)
+        {
+            CurrentGameSession = new GameSession(blob);
+        }
+
         public void StopGame()
         {
             CurrentGameSession = null;

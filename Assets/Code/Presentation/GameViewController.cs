@@ -17,7 +17,7 @@ namespace Code.Presentation
         {
             if (_gameManager != null)
                 throw new InvalidOperationException($"{nameof(GameViewController)} is already initialized.");
-            
+
             _gameManager = gameManager;
             _presentationDrawer = new PrototypePresentationDrawer(_gameManager);
         }
