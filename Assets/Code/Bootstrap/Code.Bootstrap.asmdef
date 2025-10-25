@@ -1,0 +1,21 @@
+{
+    "name": "Code.Bootstrap",
+    "rootNamespace": "Code.Bootstrap",
+    "references": [
+        "GUID:363352e1557e340619cad4cdcde539b8",
+        "GUID:374e1677744f14b2aa9d91f1160c47c5",
+        "GUID:8807d9dd76a3947beb4104490a889e11",
+        "Code.GameManagement",
+        "Code.State",
+        "Code.Presentation"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
