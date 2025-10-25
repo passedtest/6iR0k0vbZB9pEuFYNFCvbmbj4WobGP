@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Code.State;
+using UnityEngine;
 
 namespace Code.GameManagement
 {
@@ -20,7 +21,7 @@ namespace Code.GameManagement
         /// Declaring the global random state.
         /// Should be reconsidered if it will be required to restore the session by the seed.
         /// </summary>
-        private static readonly Random _randomSource = new();
+        private static readonly System.Random _randomSource = new();
 
         /// <summary>
         /// Current board rows.
@@ -33,6 +34,7 @@ namespace Code.GameManagement
         public int Columns => _boardState.Columns;
 
         private readonly BoardState _boardState;
+        private BoardLocation? _currentSelectedLocation;
 
         public GameSession(int rows, int columns)
         {
@@ -81,6 +83,57 @@ namespace Code.GameManagement
             }
 
             _boardState = new BoardState(internalState);
+        }
+
+        /// <summary>
+        /// This basically represent the user input from the UI.
+        /// </summary>
+        /// <param name="externalInput"></param>
+        public void OnInput(in BoardLocation externalInput)
+        {
+            if (_currentSelectedLocation == null)
+            {
+                // Handle 1st move input.
+                _currentSelectedLocation = externalInput;
+            }
+            else
+            {
+                if (_currentSelectedLocation.Value.Equals(externalInput))
+                {
+                    // This is just a sanity check. This should never happen as UI should handle interactivity.
+                    Debug.LogError($"Unable to select the location of '{externalInput}' as its already selected.");
+                }
+                else
+                {
+                    // Now, when the second location received, we could check if cards are matched.
+                    var input0 = _currentSelectedLocation.Value;
+                    var input1 = externalInput;
+
+                    ref var state0 = ref GetState(input0.Row, input0.Column);
+                    ref var state1 = ref GetState(input1.Row, input1.Column);
+
+                    // Check if matched.
+                    if (state0.Type == state1.Type)
+                    {
+                        // Match!
+                        
+                        // Mark state as resolved.
+                        state0.IsResolved = true;
+                        state1.IsResolved = true;
+
+                        // TODO: implement OnCellResolved event.
+                        // TODO: implement score system.
+
+                        Debug.Log("ITS A MATCH");
+                    }
+                    else
+                    {
+                        Debug.LogError("NOT A MATCH :(");
+                    }
+
+                    _currentSelectedLocation = null;
+                }
+            }
         }
 
         public ref BoardCellState GetState(int row, int column) =>

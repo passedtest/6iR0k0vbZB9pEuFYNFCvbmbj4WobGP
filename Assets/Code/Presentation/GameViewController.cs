@@ -8,6 +8,7 @@ namespace Code.Presentation
     public sealed class GameViewController : MonoBehaviour
     {
         private GameManager _gameManager;
+        private PrototypePresentationDrawer _presentationDrawer;
 
         /// <summary>
         /// Will be called from bootstrap
@@ -18,6 +19,12 @@ namespace Code.Presentation
                 throw new InvalidOperationException($"{nameof(GameViewController)} is already initialized.");
             
             _gameManager = gameManager;
+            _presentationDrawer = new PrototypePresentationDrawer(_gameManager);
+        }
+
+        private void OnGUI()
+        {
+            _presentationDrawer.OnGUI();
         }
     }
 }

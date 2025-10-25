@@ -1,0 +1,56 @@
+using Code.GameManagement;
+using UnityEngine;
+
+namespace Code.Presentation
+{
+    /// <summary>
+    /// NOTE: this temporary code to test the basic logic, and board initialization. Will be removed later.
+    /// </summary>
+    internal sealed class PrototypePresentationDrawer
+    {
+        private readonly GameManager _gameManager;
+
+        public PrototypePresentationDrawer(GameManager gameManager)
+        {
+            _gameManager = gameManager;
+        }
+
+        internal void OnGUI()
+        {
+            if (_gameManager.CurrentGameSession == null)
+            {
+                if (GUILayout.Button("Start"))
+                {
+                    _gameManager.StartOrRestartGame();
+                }
+            }
+            else
+            {
+                if (GUILayout.Button("Stop"))
+                {
+                    _gameManager.StopGame();
+                    return;
+                }
+                
+                GUILayout.BeginHorizontal();
+                for (var row = 0; row < _gameManager.CurrentGameSession.Rows; row++)
+                {
+                    GUILayout.BeginVertical();
+                    for (var column = 0; column < _gameManager.CurrentGameSession.Columns; column++)
+                    {
+                        var state = _gameManager.CurrentGameSession.GetState(row, column);
+                        if (state.IsResolved)
+                            GUILayout.Button("#");
+                        else
+                        {
+                            if (GUILayout.Button(state.Type.ToString()))
+                                _gameManager.CurrentGameSession.OnInput(new BoardLocation(row, column));
+                        }
+                    }
+                    GUILayout.EndVertical();
+                }
+                GUILayout.EndHorizontal();
+            }
+        }
+    }
+}
