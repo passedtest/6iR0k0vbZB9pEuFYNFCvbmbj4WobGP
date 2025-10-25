@@ -2,8 +2,7 @@
     "name": "Code.GameManagement",
     "rootNamespace": "Code.GameManagement",
     "references": [
-        "GUID:8807d9dd76a3947beb4104490a889e11",
-        "Code.State"
+        "GUID:8807d9dd76a3947beb4104490a889e11"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

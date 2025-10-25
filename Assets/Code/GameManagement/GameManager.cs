@@ -1,3 +1,5 @@
+using System;
+
 namespace Code.GameManagement
 {
     /// <summary>
@@ -7,5 +9,15 @@ namespace Code.GameManagement
     public sealed class GameManager
     {
         public GameSession CurrentGameSession { get; private set; }
+
+        public void StartOrRestartGame()
+        {
+            CurrentGameSession = new GameSession(rows: 5, columns: 6);
+        }
+        
+        public void StopGame()
+        {
+            CurrentGameSession = null;
+        }
     }
 }
