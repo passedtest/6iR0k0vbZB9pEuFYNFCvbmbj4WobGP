@@ -82,6 +82,13 @@ namespace Code.Presentation
 
         internal void HandleInput(BoardLocation boardLocation)
         {
+            for (var i = _delayedDisabledCards.Count - 1; i >= 0; i--)
+            {
+                var delayedDisabledCard = _delayedDisabledCards[i];
+                if (delayedDisabledCard.Location.Equals(boardLocation))
+                    _delayedDisabledCards.RemoveAt(i);
+            }
+            
             _currentTurnClickedCards.Enqueue(boardLocation);
             SetCardVisible(boardLocation, value: true);
         }

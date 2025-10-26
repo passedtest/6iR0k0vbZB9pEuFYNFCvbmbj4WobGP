@@ -65,6 +65,8 @@ namespace Code.Presentation
                 currentTime = Mathf.Max(0f, currentTime - Time.deltaTime);
                 yield return null;
             }
+
+            _currentCoroutine = null;
         }
     }
 }
