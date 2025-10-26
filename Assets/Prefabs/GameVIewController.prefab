@@ -236,7 +236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameBoardView: {fileID: 2005513156350328876}
   _visualData: {fileID: 11400000, guid: ffdc3294da0574f529023bc964a9b494, type: 2}
-  _cardPrefab: {fileID: -2620723666415647464, guid: f92a2f8f3a06145038104a29afc6eab4, type: 3}
+  _cardViewPrefab: {fileID: -2620723666415647464, guid: f92a2f8f3a06145038104a29afc6eab4, type: 3}
 --- !u!223 &2197549522376446360
 Canvas:
   m_ObjectHideFlags: 0

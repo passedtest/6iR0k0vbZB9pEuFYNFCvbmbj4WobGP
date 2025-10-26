@@ -19,7 +19,7 @@ namespace Code.Presentation
         private GameSession _gameSession;
         private CardPool _cardPool;
         private CellsVisualData _visualData;
-        private Card[,] _cardInstances;
+        private CardView[,] _cardInstances;
 
         protected override void Awake()
         {
@@ -27,9 +27,9 @@ namespace Code.Presentation
             _rectTransform = GetComponent<RectTransform>();
         }
 
-        internal void Initialize(Card cardPrefab, CellsVisualData cellsVisualData)
+        internal void Initialize(CardView cardViewPrefab, CellsVisualData cellsVisualData)
         {
-            _cardPool ??= new CardPool(cardPrefab, transform);
+            _cardPool ??= new CardPool(cardViewPrefab, transform);
             _visualData = cellsVisualData;
         }
 
@@ -43,7 +43,7 @@ namespace Code.Presentation
             constraintCount = session.Rows;
 
             _gameSession = session;
-            _cardInstances = new Card[_rows, _columns];
+            _cardInstances = new CardView[_rows, _columns];
 
             for (var row = 0; row < session.Rows; row++)
             {

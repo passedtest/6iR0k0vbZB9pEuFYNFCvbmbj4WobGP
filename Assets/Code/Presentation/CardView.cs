@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace Code.Presentation
 {
     [DisallowMultipleComponent]
-    internal sealed class Card : MonoBehaviour
+    internal sealed class CardView : MonoBehaviour
     {
         private event Action<BoardLocation> _clicked;
 

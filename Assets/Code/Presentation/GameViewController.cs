@@ -11,7 +11,7 @@ namespace Code.Presentation
 
         [SerializeField] private CellsVisualData _visualData;
 
-        [SerializeField] private Card _cardPrefab;
+        [SerializeField] private CardView _cardViewPrefab;
 
         private GameManager _gameManager;
         private PrototypePresentationDrawer _presentationDrawer;
@@ -28,7 +28,7 @@ namespace Code.Presentation
             _gameManager.SessionStarted += OnSessionStarted;
             _gameManager.SessionStopped += OnSessionStopped;
 
-            _gameBoardView.Initialize(_cardPrefab, _visualData);
+            _gameBoardView.Initialize(_cardViewPrefab, _visualData);
             _gameBoardView.CardClicked += OnCardClicked;
 
             _presentationDrawer = new PrototypePresentationDrawer(_gameManager);
