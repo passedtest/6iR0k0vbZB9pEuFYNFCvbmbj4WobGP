@@ -16,10 +16,8 @@ namespace Code.Presentation
         }
 
         public event Action<BoardLocation> CardClicked = delegate { };
-
-        [SerializeField] private int _rows;
-
-        [SerializeField] private int _columns;
+        
+        [SerializeField] private int _layoutColumns = 1;
 
         [SerializeField] private RectTransform _rectTransform;
 
@@ -48,12 +46,12 @@ namespace Code.Presentation
             if (_gameSession != null)
                 throw new InvalidOperationException("View is already initialized. Call 'Release' before initializing it again.");
 
-            _columns = session.Columns;
+            _layoutColumns = session.Columns;
             constraint = Constraint.FixedRowCount;
             constraintCount = session.Rows;
 
             _gameSession = session;
-            _cardInstances = new CardView[_rows, _columns];
+            _cardInstances = new CardView[session.Rows, session.Columns];
 
             for (var row = 0; row < session.Rows; row++)
             {
@@ -156,22 +154,11 @@ namespace Code.Presentation
 
         public override void SetLayoutVertical()
         {
-            var width = _rectTransform.rect.width - padding.horizontal - (_columns - 1) * spacing.x;
-            var cellWidth = width / _columns;
+            var width = _rectTransform.rect.width - padding.horizontal - (_layoutColumns - 1) * spacing.x;
+            var cellWidth = width / _layoutColumns;
             cellSize = new Vector2(cellWidth, cellWidth);
 
             base.SetLayoutVertical();
         }
-
-#if UNITY_EDITOR
-        protected override void OnValidate()
-        {
-            base.OnValidate();
-
-            constraint = Constraint.FixedRowCount;
-            constraintCount = _rows;
-            _rectTransform = GetComponent<RectTransform>();
-        }
-#endif
     }
 }

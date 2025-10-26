@@ -25,7 +25,7 @@ namespace Code.GameManagement
             SessionInitialized();
         }
 
-        public void StartOrRestartGame(byte[] blob)
+        private void StartOrRestartGame(byte[] blob)
         {
             TryStopCurrentSession();
             CurrentGameSession = new GameSession(blob, DEFAULT_START_TIMEOUT);

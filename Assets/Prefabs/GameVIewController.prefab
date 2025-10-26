@@ -903,12 +903,11 @@ MonoBehaviour:
   m_ChildAlignment: 5
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 146.8172, y: 146.8172}
+  m_CellSize: {x: 880.9032, y: 880.9032}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 2
-  m_ConstraintCount: 5
-  _rows: 5
-  _columns: 6
+  m_ConstraintCount: 1
+  _layoutColumns: 1
   _rectTransform: {fileID: 1918164844178704082}
 --- !u!1 &5610955394003028040
 GameObject:
@@ -1152,6 +1151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c99dbe3ecbf147bf9ecdc5a9e35e9a39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _desiredRows: 5
+  _desiredColumns: 6
   _startStopButton: {fileID: 3721126581649377535}
   _saveButton: {fileID: 9031004131977178296}
   _loadButton: {fileID: 7119673263322861091}

@@ -12,11 +12,11 @@ namespace Code.GameManagement
     public sealed class GameSession
     {
         // NOTE: The following constants are declared based on .pdf document.
-        private const int MIN_ROWS = 2;
-        private const int MIN_COLUMNS = 2;
+        public const int MIN_ROWS = 2;
+        public const int MIN_COLUMNS = 2;
 
-        private const int MAX_ROWS = 5;
-        private const int MAX_COLUMNS = 6;
+        public const int MAX_ROWS = 5;
+        public const int MAX_COLUMNS = 6;
 
         /// <summary>
         /// Declaring the global random state.

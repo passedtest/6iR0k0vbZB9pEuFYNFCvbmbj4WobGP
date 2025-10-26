@@ -326,6 +326,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 784671450311094546, guid: 3eaca4d993b1245fe933577c61082c3e, type: 3}
+      propertyPath: _desiredColumns
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 784671450311094547, guid: 3eaca4d993b1245fe933577c61082c3e, type: 3}
       propertyPath: m_Name
       value: Bootstrap
