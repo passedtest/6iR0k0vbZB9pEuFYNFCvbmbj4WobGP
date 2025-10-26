@@ -45,12 +45,12 @@ namespace Code.Presentation
                     _gameManager.StopGame();
                     return;
                 }
-
+                
                 GUILayout.BeginHorizontal();
-                for (var row = 0; row < _gameManager.CurrentGameSession.Rows; row++)
+                for (var column = 0; column < _gameManager.CurrentGameSession.Columns; column++)
                 {
                     GUILayout.BeginVertical();
-                    for (var column = 0; column < _gameManager.CurrentGameSession.Columns; column++)
+                    for (var row = 0; row < _gameManager.CurrentGameSession.Rows; row++)
                     {
                         var state = _gameManager.CurrentGameSession.GetState(row, column);
                         if (state.IsResolved)
@@ -61,10 +61,8 @@ namespace Code.Presentation
                                 _gameManager.CurrentGameSession.OnInput(new BoardLocation(row, column));
                         }
                     }
-
                     GUILayout.EndVertical();
                 }
-
                 GUILayout.EndHorizontal();
             }
         }

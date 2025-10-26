@@ -1,0 +1,486 @@
+fileFormatVersion: 2
+guid: 2f34effb9838f4af88d056ffabfb1cf4
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 275
+        width: 68
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5745884fe175c42cb8140102fab4ef3f
+      internalID: -120250329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_1
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 283
+        width: 55
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44515f7dcd34742078aef80a267578ef
+      internalID: -1396053727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_2
+      rect:
+        serializedVersion: 2
+        x: 189
+        y: 289
+        width: 58
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c5514db1e3514dee9e7a3aa4b24c143
+      internalID: -1600297050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_3
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 278
+        width: 73
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 048060c69a9c34a04b50fb379aa124f7
+      internalID: -158519228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 69
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36548817bd8114743a25cd8dba9a40af
+      internalID: -1895702296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_5
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 186
+        width: 59
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff29f5c59ef3d490fbf7bdd8fe396f96
+      internalID: -1279016986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_6
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 171
+        width: 56
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c4fb92e10bd9445c8ce279950fc7484
+      internalID: -1268368957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_7
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 192
+        width: 69
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23d1e076cb92a44f8814c6b947ad2199
+      internalID: 1082934474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_8
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 95
+        width: 70
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 921aa2eb192b548409190a0a6f0409b4
+      internalID: 571242402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_9
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 102
+        width: 58
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40907bce4a55e486790b61c38b5210ba
+      internalID: 729534499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_10
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 91
+        width: 53
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8fdab3b61897b4832ab5c97de3bf1ea9
+      internalID: -217451643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_11
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 94
+        width: 65
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8514796908f243ca9d26c1807353a27
+      internalID: -1423876225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_12
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 9
+        width: 75
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07848061241c840c6ad9fec9ebc0e40e
+      internalID: -144009406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_13
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 0
+        width: 48
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3392e6aac2b4b4b4380c36526bbf7f7f
+      internalID: -332064902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_14
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 5
+        width: 53
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d93ccdb2926054375a6c1281f6fbfd5e
+      internalID: 1724486110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pngtree-set-of-vegetables-illustration-vector-png-image_11371242_15
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 3
+        width: 53
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0364726bf351475494d9a57cade7a2a
+      internalID: 2034630812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_15: 2034630812
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_1: -1396053727
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_5: -1279016986
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_7: 1082934474
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_9: 729534499
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_2: -1600297050
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_0: -120250329
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_6: -1268368957
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_12: -144009406
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_13: -332064902
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_4: -1895702296
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_14: 1724486110
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_11: -1423876225
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_10: -217451643
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_3: -158519228
+      pngtree-set-of-vegetables-illustration-vector-png-image_11371242_8: 571242402
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
