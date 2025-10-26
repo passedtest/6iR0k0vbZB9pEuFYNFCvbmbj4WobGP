@@ -35,7 +35,7 @@ namespace Code.Presentation
             {
                 if (GUILayout.Button("Start"))
                 {
-                    _gameManager.StartOrRestartGame();
+                    _gameManager.StartOrRestartGame(rows: 5, columns: 6);
                 }
             }
             else

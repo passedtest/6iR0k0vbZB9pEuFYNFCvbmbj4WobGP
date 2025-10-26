@@ -17,7 +17,7 @@ namespace Code.Presentation
         [SerializeField] private RectTransform _rectTransform;
 
         private GameSession _gameSession;
-        private CardPool _cardPool;
+        private CardViewPool _cardViewViewPool;
         private CellsVisualData _visualData;
         private CardView[,] _cardInstances;
 
@@ -29,7 +29,7 @@ namespace Code.Presentation
 
         internal void Initialize(CardView cardViewPrefab, CellsVisualData cellsVisualData)
         {
-            _cardPool ??= new CardPool(cardViewPrefab, transform);
+            _cardViewViewPool ??= new CardViewPool(cardViewPrefab, transform);
             _visualData = cellsVisualData;
         }
 
@@ -50,8 +50,23 @@ namespace Code.Presentation
                 for (var column = 0; column < session.Columns; column++)
                 {
                     var state = session.GetState(row, column);
-                    _cardInstances[row, column] = _cardPool.Get();
-                    _cardInstances[row, column].Init(_visualData.CellVisualData[state.Type], new BoardLocation(row, column), OnCardClicked);
+                    var cardViewInstance = _cardViewViewPool.Get();
+                    cardViewInstance.Init(_visualData.CellVisualData[state.Type], new BoardLocation(row, column), OnCardClicked);
+                    _cardInstances[row, column] = cardViewInstance;
+                }
+            }
+        }
+
+        internal void UpdateView()
+        {
+            for (var row = 0; row < _gameSession.Rows; row++)
+            {
+                for (var column = 0; column < _gameSession.Columns; column++)
+                {
+                    var state = _gameSession.GetState(row, column);
+                    var cardViewInstance = _cardInstances[row, column];
+                    
+                    cardViewInstance.SetVisible(state.IsResolved);
                 }
             }
         }
@@ -66,16 +81,14 @@ namespace Code.Presentation
 
             _gameSession = null;
             foreach (var card in _cardInstances)
-                _cardPool.Release(card);
+                _cardViewViewPool.Release(card);
             _cardInstances = null;
         }
 
-        internal void UpdateCardState(BoardLocation boardLocation)
+        internal void SetVisible(BoardLocation boardLocation, bool value)
         {
             ref var card = ref _cardInstances[boardLocation.Row, boardLocation.Column];
-            ref var state = ref _gameSession.GetState(boardLocation.Row, boardLocation.Column);
-
-            card.UpdateState(state);
+            card.SetVisible(value);
         }
 
         public override void SetLayoutVertical()

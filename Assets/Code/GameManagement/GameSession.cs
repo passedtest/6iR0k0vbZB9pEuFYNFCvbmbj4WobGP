@@ -30,7 +30,17 @@ namespace Code.GameManagement
         /// </summary>
         private static readonly IBoardSerializationStrategy serializationStrategy =
             new DefaultBoardSerializationStrategy();
-
+        
+        /// <summary>
+        /// Called when the game is started.
+        /// </summary>
+        public event Action Started = delegate { };
+        
+        /// <summary>
+        /// Invokes when used turn is started.
+        /// </summary>
+        public event Action TurnStarted = delegate { };
+        
         /// <summary>
         /// Invokes when used turn is finished.
         /// </summary>
@@ -61,13 +71,22 @@ namespace Code.GameManagement
         /// </summary>
         public int Matches { get; private set; }
 
+        /// <summary>
+        /// A total session time in seconds.
+        /// </summary>
+        public float SessionTime { get; private set; }
+
+        public bool AllowToMakeTurn => Mathf.Approximately(_startTimout, 0f);
+
+        private float _startTimout;
+
         private readonly BoardState _boardState;
         private BoardLocation? _currentSelectedLocation;
 
         /// <summary>
         /// Initialize a new game session with explicit rows/columns arguments.
         /// </summary>
-        internal GameSession(int rows, int columns)
+        internal GameSession(int rows, int columns, float startTimout = 0f)
         {
             if (rows < MIN_ROWS || rows > MAX_ROWS || columns < MIN_COLUMNS || columns > MAX_COLUMNS)
                 throw new IndexOutOfRangeException(
@@ -77,6 +96,8 @@ namespace Code.GameManagement
             if (totalStates % 2 != 0)
                 throw new ArgumentException(
                     "The total number of board cells (rows * cols) must be even (pairing required");
+
+            _startTimout = Mathf.Max(startTimout, 0f);
 
             var internalState = new BoardCellState[rows, columns];
             var numberOfPairs = totalStates / 2;
@@ -119,8 +140,10 @@ namespace Code.GameManagement
         /// <summary>
         /// Initialize a new game session from the binary blob using <see cref="IBoardSerializationStrategy"/> implementation.
         /// </summary>
-        internal GameSession(byte[] bytes)
+        internal GameSession(byte[] bytes, float startTimout = 0f)
         {
+            _startTimout = Mathf.Max(startTimout, 0f);
+
             // TODO: Should also serialize turns and matches.
             _boardState = serializationStrategy.Deserialize(bytes);
         }
@@ -141,10 +164,24 @@ namespace Code.GameManagement
         /// <param name="inputLocation"></param>
         public void OnInput(in BoardLocation inputLocation)
         {
+            if (!AllowToMakeTurn)
+            {
+                Debug.LogError($"Unable to make a move yet, current timeout is '{_startTimout}'.");
+                return;
+            }
+            
+            ref var desiredState = ref GetState(inputLocation.Row, inputLocation.Column);
+            if (desiredState.IsResolved)
+            {
+                Debug.LogError($"Unable to select the location of '{inputLocation}' as its already resolved.");
+                return;
+            }
+
             if (_currentSelectedLocation == null)
             {
                 // Handle 1st move input.
                 _currentSelectedLocation = inputLocation;
+                TurnStarted();
             }
             else
             {
@@ -195,6 +232,23 @@ namespace Code.GameManagement
                     // State was changed (not necessary a match).
                     TurnFinished();
                 }
+            }
+        }
+
+        internal void Update(float deltaTime)
+        {
+            if (_startTimout > 0)
+            {
+                _startTimout -= deltaTime;
+                if (_startTimout <= 0)
+                {
+                    _startTimout = 0;
+                    Started();
+                }
+            }
+            else
+            {
+                SessionTime += deltaTime;
             }
         }
 

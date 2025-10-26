@@ -1,6 +1,5 @@
 using System;
 using Code.GameManagement;
-using Code.State;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,17 +16,20 @@ namespace Code.Presentation
 
         private BoardLocation _location;
 
+        private void Awake() =>
+            _button.onClick.AddListener(OnClick);
+
         internal void Init(Sprite sprite, BoardLocation location, Action<BoardLocation> clicked)
         {
             _image.sprite = sprite;
+            _image.enabled = true;
             _location = location;
             _clicked = clicked;
-            _button.onClick.AddListener(OnClick);
         }
 
-        internal void UpdateState(BoardCellState state)
+        internal void SetVisible(bool value)
         {
-            _image.enabled = !state.IsResolved;
+            _image.enabled = value;
         }
 
         private void OnClick() =>

@@ -8,23 +8,25 @@ namespace Code.GameManagement
     /// </summary>
     public sealed class GameManager
     {
-        public event Action SessionStarted = delegate { };
-        public event Action SessionStopped = delegate { };
+        private const float DEFAULT_START_TIMEOUT = 3f;
+        
+        public event Action SessionInitialized = delegate { };
+        public event Action SessionReleased = delegate { };
 
         public GameSession CurrentGameSession { get; private set; }
 
-        public void StartOrRestartGame()
+        public void StartOrRestartGame(int rows, int columns)
         {
             TryStopCurrentSession();
-            CurrentGameSession = new GameSession(rows: 5, columns: 6);
-            SessionStarted();
+            CurrentGameSession = new GameSession(rows, columns, DEFAULT_START_TIMEOUT);
+            SessionInitialized();
         }
 
         public void StartOrRestartGame(byte[] blob)
         {
             TryStopCurrentSession();
-            CurrentGameSession = new GameSession(blob);
-            SessionStarted();
+            CurrentGameSession = new GameSession(blob, DEFAULT_START_TIMEOUT);
+            SessionInitialized();
         }
 
         public void TryStopCurrentSession()
@@ -33,7 +35,10 @@ namespace Code.GameManagement
                 return;
 
             CurrentGameSession = null;
-            SessionStopped();
+            SessionReleased();
         }
+
+        public void Update(float deltaTime) =>
+            CurrentGameSession?.Update(deltaTime);
     }
 }

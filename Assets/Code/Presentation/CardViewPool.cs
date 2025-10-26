@@ -3,14 +3,14 @@ using UnityEngine.Pool;
 
 namespace Code.Presentation
 {
-    internal sealed class CardPool
+    internal sealed class CardViewPool
     {
         private readonly GameObject _poolContainer;
         private readonly Transform _gameBoardParent;
         private readonly CardView _cardViewPrefab;
         private readonly ObjectPool<CardView> _cardPool;
 
-        internal CardPool(CardView cardViewPrefab, Transform gameBoardParent)
+        internal CardViewPool(CardView cardViewPrefab, Transform gameBoardParent)
         {
             _poolContainer = new GameObject(name: $"'{cardViewPrefab.name}' POOL");
             _cardViewPrefab = cardViewPrefab;
