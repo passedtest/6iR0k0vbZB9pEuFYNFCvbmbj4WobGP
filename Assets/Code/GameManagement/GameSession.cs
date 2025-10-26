@@ -15,7 +15,7 @@ namespace Code.GameManagement
         public const int MIN_ROWS = 2;
         public const int MIN_COLUMNS = 2;
 
-        public const int MAX_ROWS = 5;
+        public const int MAX_ROWS = 6;
         public const int MAX_COLUMNS = 6;
 
         /// <summary>
@@ -81,6 +81,11 @@ namespace Code.GameManagement
         /// Amount of matches.
         /// </summary>
         public int Matches { get; private set; }
+
+        /// <summary>
+        /// An amount of turns user has been done so far.
+        /// </summary>
+        public int Combo { get; private set; }
 
         /// <summary>
         /// A total session time in seconds.
@@ -159,6 +164,7 @@ namespace Code.GameManagement
             var sessionState = serializationStrategy.Deserialize(bytes);
             Turns = sessionState.Turns;
             Matches = sessionState.Matches;
+            Combo = sessionState.Combo;
             Time = sessionState.Time;
             _boardState = sessionState.BoardState;
         }
@@ -219,17 +225,21 @@ namespace Code.GameManagement
                 {
                     // Match!
                     Matches++;
+                    Combo++;
 
-                    // Mark state as resolved, and invoke the events.
+                    // Mark state as resolved.
                     state0.IsResolved = true;
-                    CellResolved(location0);
-
                     state1.IsResolved = true;
+
+                    // Invoke the events.
+                    CellResolved(location0);
                     CellResolved(location1);
 
                     if (Matches == _boardState.Columns * _boardState.Rows / 2)
                         gameFinished = true;
                 }
+                else
+                    Combo = 0;
 
                 // State was changed (not necessary a match).
                 TurnFinished(isMatch);

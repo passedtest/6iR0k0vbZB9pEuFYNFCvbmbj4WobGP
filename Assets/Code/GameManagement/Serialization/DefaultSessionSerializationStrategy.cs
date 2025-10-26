@@ -17,6 +17,7 @@ namespace Code.GameManagement.Serialization
 
             writer.Write(session.Turns);
             writer.Write(session.Matches);
+            writer.Write(session.Combo);
             writer.Write(session.Time);
             writer.Write(session.Rows);
             writer.Write(session.Columns);
@@ -45,6 +46,7 @@ namespace Code.GameManagement.Serialization
 
             var turns = reader.ReadInt32();
             var matches = reader.ReadInt32();
+            var combo = reader.ReadInt32();
             var time = reader.ReadSingle();
             var rows = reader.ReadInt32();
             var columns = reader.ReadInt32();
@@ -66,7 +68,7 @@ namespace Code.GameManagement.Serialization
             }
 
             var boardState = new BoardState(internalState);
-            return new GameSessionState(turns, matches, time, boardState);
+            return new GameSessionState(turns, matches, combo, time, boardState);
         }
     }
 }
