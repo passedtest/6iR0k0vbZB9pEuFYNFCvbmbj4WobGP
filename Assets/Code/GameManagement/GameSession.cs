@@ -43,8 +43,9 @@ namespace Code.GameManagement
         
         /// <summary>
         /// Invokes when used turn is finished.
+        /// Bool represents whether it was a match or not.
         /// </summary>
-        public event Action TurnFinished = delegate { };
+        public event Action<bool> TurnFinished = delegate { };
 
         /// <summary>
         /// Invokes when the specific cell was resolved.
@@ -204,8 +205,9 @@ namespace Code.GameManagement
                     // Reset the current selected location before next move.
                     _currentSelectedLocation = null;
 
+                    var isMatch = state0.Type == state1.Type; 
                     // Check if matched.
-                    if (state0.Type == state1.Type)
+                    if (isMatch)
                     {
                         // Match!
                         Matches++;
@@ -230,7 +232,7 @@ namespace Code.GameManagement
                     }
 
                     // State was changed (not necessary a match).
-                    TurnFinished();
+                    TurnFinished(isMatch);
                 }
             }
         }

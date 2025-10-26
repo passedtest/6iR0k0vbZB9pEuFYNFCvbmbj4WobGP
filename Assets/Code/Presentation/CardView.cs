@@ -23,8 +23,15 @@ namespace Code.Presentation
         {
             _image.sprite = sprite;
             _image.enabled = true;
+            _button.interactable = false;
+            
             _location = location;
             _clicked = clicked;
+        }
+
+        internal void SetInteractable(bool value)
+        {
+            _button.interactable = value;
         }
 
         internal void SetVisible(bool value)

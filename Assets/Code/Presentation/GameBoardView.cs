@@ -57,7 +57,7 @@ namespace Code.Presentation
             }
         }
 
-        internal void UpdateView()
+        internal void OnSessionStarted()
         {
             for (var row = 0; row < _gameSession.Rows; row++)
             {
@@ -67,6 +67,7 @@ namespace Code.Presentation
                     var cardViewInstance = _cardInstances[row, column];
                     
                     cardViewInstance.SetVisible(state.IsResolved);
+                    cardViewInstance.SetInteractable(!state.IsResolved);
                 }
             }
         }
@@ -87,8 +88,14 @@ namespace Code.Presentation
 
         internal void SetVisible(BoardLocation boardLocation, bool value)
         {
-            ref var card = ref _cardInstances[boardLocation.Row, boardLocation.Column];
-            card.SetVisible(value);
+            ref var cardView = ref _cardInstances[boardLocation.Row, boardLocation.Column];
+            cardView.SetVisible(value);
+        }
+        
+        internal void SetInteractable(BoardLocation boardLocation, bool value)
+        {
+            ref var cardView = ref _cardInstances[boardLocation.Row, boardLocation.Column];
+            cardView.SetInteractable(value);
         }
 
         public override void SetLayoutVertical()

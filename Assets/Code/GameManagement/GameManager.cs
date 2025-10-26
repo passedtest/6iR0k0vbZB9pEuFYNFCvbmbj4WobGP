@@ -12,8 +12,11 @@ namespace Code.GameManagement
         
         public event Action SessionInitialized = delegate { };
         public event Action SessionReleased = delegate { };
-
+        public event Action SessionSaved = delegate { };
+        
         public GameSession CurrentGameSession { get; private set; }
+        
+        private byte[] _lastSessionSerializedData;
 
         public void StartOrRestartGame(int rows, int columns)
         {
@@ -27,6 +30,21 @@ namespace Code.GameManagement
             TryStopCurrentSession();
             CurrentGameSession = new GameSession(blob, DEFAULT_START_TIMEOUT);
             SessionInitialized();
+        }
+
+        public void TrySaveCurrentSession()
+        {
+            if (CurrentGameSession == null) 
+                return;
+            
+            _lastSessionSerializedData = CurrentGameSession.Serialize();
+            SessionSaved();
+        }
+        
+        public void TryLoadSessionFromSaveData()
+        {
+            if (_lastSessionSerializedData != null)
+                StartOrRestartGame(_lastSessionSerializedData);
         }
 
         public void TryStopCurrentSession()

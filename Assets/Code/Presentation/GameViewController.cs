@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Code.GameManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Code.Presentation
 {
@@ -14,7 +15,12 @@ namespace Code.Presentation
             internal float Time;
         }
 
+        [SerializeField] private Button _startStopButton;
+        [SerializeField] private Button _saveButton;
+        [SerializeField] private Button _loadButton;
+
         [SerializeField] private GameBoardView _gameBoardView;
+        [SerializeField] private ScoreView _scoreView;
 
         [SerializeField] private CellsVisualData _visualData;
 
@@ -36,15 +42,48 @@ namespace Code.Presentation
             _gameManager = gameManager;
             _gameManager.SessionInitialized += OnSessionInitialized;
             _gameManager.SessionReleased += OnSessionReleased;
+            _gameManager.SessionSaved += OnSessionSaved;
 
             _gameBoardView.Initialize(_cardViewPrefab, _visualData);
             _gameBoardView.CardClicked += OnCardClicked;
 
+            _startStopButton.onClick.AddListener(OnStartStopButtonPressed);
+            UpdateStartStopButtonText();
+            UpdateSaveButtonState();
+            UpdateScoreViewVisibility();
+
+            _saveButton.onClick.AddListener(OnSaveButtonPressed);
+            _saveButton.interactable = false;
+
+            _loadButton.onClick.AddListener(OnLoadButtonPressed);
+            _loadButton.interactable = false;
+
             _presentationDrawer = new PrototypePresentationDrawer(_gameManager);
         }
 
+        private void OnStartStopButtonPressed()
+        {
+            if (_gameManager.CurrentGameSession == null)
+                _gameManager.StartOrRestartGame(rows: 5, columns: 6);
+            else
+                _gameManager.TryStopCurrentSession();
+        }
+
+        private void OnSaveButtonPressed() =>
+            _gameManager.TrySaveCurrentSession();
+
+        private void OnLoadButtonPressed() =>
+            _gameManager.TryLoadSessionFromSaveData();
+
+        private void OnSessionSaved() =>
+            _loadButton.interactable = true;
+
         private void OnSessionInitialized()
         {
+            UpdateStartStopButtonText();
+            UpdateSaveButtonState();
+            UpdateScoreViewVisibility();
+
             var session = _gameManager.CurrentGameSession;
             session.Started += OnSessionStarted;
             session.TurnStarted += OnTurnStarted;
@@ -52,15 +91,28 @@ namespace Code.Presentation
             session.CellResolved += OnCurrentSessionCellResolved;
 
             _gameBoardView.InitializeSession(session);
+            _scoreView.ResetState();
+        }
+
+        private void OnSessionReleased()
+        {
+            UpdateStartStopButtonText();
+            UpdateSaveButtonState();
+            UpdateScoreViewVisibility();
+
+            _gameBoardView.TryReleaseSession();
         }
 
         private void OnSessionStarted()
         {
-            _gameBoardView.UpdateView();
+            _gameBoardView.OnSessionStarted();
         }
 
-        private void OnTurnFinished()
+        private void OnTurnFinished(bool isMatch)
         {
+            _scoreView.UpdateTurnsCount(_gameManager.CurrentGameSession.Turns);
+            _scoreView.UpdateMatchesCount(_gameManager.CurrentGameSession.Matches);
+
             while (_currentTurnClickedCards.TryDequeue(out var boardLocation))
             {
                 var state = _gameManager.CurrentGameSession.GetState(boardLocation.Row, boardLocation.Column);
@@ -72,9 +124,7 @@ namespace Code.Presentation
         private void OnTurnStarted()
         {
             foreach (var delayedDisabledCard in _delayedDisabledCards)
-            {
                 _gameBoardView.SetVisible(delayedDisabledCard.Location, false);
-            }
 
             _delayedDisabledCards.Clear();
         }
@@ -100,12 +150,18 @@ namespace Code.Presentation
         private void OnCurrentSessionCellResolved(BoardLocation boardLocation)
         {
             _gameBoardView.SetVisible(boardLocation, true);
+            _gameBoardView.SetInteractable(boardLocation, false);
         }
 
-        private void OnSessionReleased()
-        {
-            _gameBoardView.TryReleaseSession();
-        }
+        private void UpdateStartStopButtonText() =>
+            _startStopButton.GetComponentInChildren<Text>().text =
+                _gameManager.CurrentGameSession == null ? "Start" : "Stop";
+
+        private void UpdateSaveButtonState() =>
+            _saveButton.interactable = _gameManager.CurrentGameSession != null;
+
+        private void UpdateScoreViewVisibility() =>
+            _scoreView.gameObject.SetActive(_gameManager.CurrentGameSession != null);
 
         private void OnCardClicked(BoardLocation boardLocation)
         {
