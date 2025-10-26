@@ -30,12 +30,12 @@ namespace Code.GameManagement
         /// </summary>
         private static readonly IBoardSerializationStrategy serializationStrategy =
             new DefaultBoardSerializationStrategy();
-        
+
         /// <summary>
         /// Invokes when used turn is finished.
         /// </summary>
         public event Action TurnFinished = delegate { };
-        
+
         /// <summary>
         /// Invokes when the specific cell was resolved.
         /// </summary>
@@ -50,12 +50,12 @@ namespace Code.GameManagement
         /// Current board columns.
         /// </summary>
         public int Columns => _boardState.Columns;
-        
+
         /// <summary>
         /// An amount of turns user has been done so far.
         /// </summary>
         public int Turns { get; private set; }
-        
+
         /// <summary>
         /// Amount of matches.
         /// </summary>
@@ -124,7 +124,7 @@ namespace Code.GameManagement
             // TODO: Should also serialize turns and matches.
             _boardState = serializationStrategy.Deserialize(bytes);
         }
-        
+
         /// <summary>
         /// Initialize a new game session with an explicit state.
         /// </summary>
@@ -156,7 +156,7 @@ namespace Code.GameManagement
                 else
                 {
                     Turns++;
-                    
+
                     // Now, when the second location received, we could check if cards are matched.
                     var location0 = _currentSelectedLocation.Value;
                     var location1 = inputLocation;
@@ -176,10 +176,10 @@ namespace Code.GameManagement
                         // Mark state as resolved, and invoke the events.
                         state0.IsResolved = true;
                         CellResolved(location0);
-                        
+
                         state1.IsResolved = true;
                         CellResolved(location1);
-                        
+
                         Debug.Log("ITS A MATCH");
 
                         if (Matches == _boardState.Columns * _boardState.Rows / 2)

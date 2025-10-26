@@ -12,16 +12,16 @@ namespace Code.Presentation
 
         internal CardPool(Card cardPrefab, Transform gameBoardParent)
         {
-            _poolContainer = new GameObject(name : $"'{cardPrefab.name}' POOL");
+            _poolContainer = new GameObject(name: $"'{cardPrefab.name}' POOL");
             _cardPrefab = cardPrefab;
             _gameBoardParent = gameBoardParent;
             _cardPool = new ObjectPool<Card>(CreateInstance, actionOnRelease: ReleaseInstance, actionOnGet: GetInstance, defaultCapacity: 15);
         }
 
-        internal Card Get() => 
+        internal Card Get() =>
             _cardPool.Get();
-        
-        internal void Release(Card card) => 
+
+        internal void Release(Card card) =>
             _cardPool.Release(card);
 
         private void GetInstance(Card instance)

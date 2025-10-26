@@ -45,7 +45,7 @@ namespace Code.Presentation
                     _gameManager.TryStopCurrentSession();
                     return;
                 }
-                
+
                 GUILayout.BeginHorizontal();
                 for (var column = 0; column < _gameManager.CurrentGameSession.Columns; column++)
                 {
@@ -61,8 +61,10 @@ namespace Code.Presentation
                                 _gameManager.CurrentGameSession.OnInput(new BoardLocation(row, column));
                         }
                     }
+
                     GUILayout.EndVertical();
                 }
+
                 GUILayout.EndHorizontal();
             }
         }

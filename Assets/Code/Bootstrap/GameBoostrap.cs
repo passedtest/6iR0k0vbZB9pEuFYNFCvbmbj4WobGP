@@ -11,15 +11,14 @@ namespace Code.Bootstrap
     [DisallowMultipleComponent]
     internal sealed class GameBoostrap : MonoBehaviour
     {
-        [SerializeField]
-        private GameViewController _gameViewControllerPrefab;
+        [SerializeField] private GameViewController _gameViewControllerPrefab;
         private GameManager _gameManager;
-        
+
         private void Start()
         {
             // Create game manager.
             _gameManager = new GameManager();
-            
+
             // Initialize view.
             var gameViewController = Instantiate(_gameViewControllerPrefab);
             gameViewController.Initialize(_gameManager);

@@ -29,9 +29,9 @@ namespace Code.GameManagement
 
         public void TryStopCurrentSession()
         {
-            if (CurrentGameSession == null) 
+            if (CurrentGameSession == null)
                 return;
-            
+
             CurrentGameSession = null;
             SessionStopped();
         }

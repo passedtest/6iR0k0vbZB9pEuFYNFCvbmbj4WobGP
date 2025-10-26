@@ -10,13 +10,11 @@ namespace Code.Presentation
     internal sealed class Card : MonoBehaviour
     {
         private event Action<BoardLocation> _clicked;
-        
-        [SerializeField]
-        private Image _image;
-        
-        [SerializeField]
-        private Button _button;
-        
+
+        [SerializeField] private Image _image;
+
+        [SerializeField] private Button _button;
+
         private BoardLocation _location;
 
         internal void Init(Sprite sprite, BoardLocation location, Action<BoardLocation> clicked)

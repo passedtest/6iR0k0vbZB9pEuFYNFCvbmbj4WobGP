@@ -69,12 +69,12 @@ namespace Code.Presentation
                 _cardPool.Release(card);
             _cardInstances = null;
         }
-        
+
         internal void UpdateCardState(BoardLocation boardLocation)
         {
             ref var card = ref _cardInstances[boardLocation.Row, boardLocation.Column];
             ref var state = ref _gameSession.GetState(boardLocation.Row, boardLocation.Column);
-            
+
             card.UpdateState(state);
         }
 

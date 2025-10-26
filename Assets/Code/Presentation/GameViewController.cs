@@ -30,7 +30,7 @@ namespace Code.Presentation
 
             _gameBoardView.Initialize(_cardPrefab, _visualData);
             _gameBoardView.CardClicked += OnCardClicked;
-            
+
             _presentationDrawer = new PrototypePresentationDrawer(_gameManager);
         }
 
