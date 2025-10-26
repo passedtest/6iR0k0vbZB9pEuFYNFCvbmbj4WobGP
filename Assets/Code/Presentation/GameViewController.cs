@@ -48,10 +48,6 @@ namespace Code.Presentation
             _gameBoardView.CardClicked += OnCardClicked;
 
             _startStopButton.onClick.AddListener(OnStartStopButtonPressed);
-            UpdateStartStopButtonText();
-            UpdateSaveButtonState();
-            UpdateScoreViewVisibility();
-
             _saveButton.onClick.AddListener(OnSaveButtonPressed);
             _saveButton.interactable = false;
 
@@ -59,6 +55,10 @@ namespace Code.Presentation
             _loadButton.interactable = false;
 
             _presentationDrawer = new PrototypePresentationDrawer(_gameManager);
+
+            UpdateStartStopButtonText();
+            UpdateSaveButtonState();
+            UpdateScoreViewVisibility();
         }
 
         private void OnStartStopButtonPressed()
@@ -91,7 +91,7 @@ namespace Code.Presentation
             session.CellResolved += OnCurrentSessionCellResolved;
 
             _gameBoardView.InitializeSession(session);
-            _scoreView.ResetState();
+            UpdateScoreView();
         }
 
         private void OnSessionReleased()
@@ -110,8 +110,7 @@ namespace Code.Presentation
 
         private void OnTurnFinished(bool isMatch)
         {
-            _scoreView.UpdateTurnsCount(_gameManager.CurrentGameSession.Turns);
-            _scoreView.UpdateMatchesCount(_gameManager.CurrentGameSession.Matches);
+            UpdateScoreView();
 
             while (_currentTurnClickedCards.TryDequeue(out var boardLocation))
             {
@@ -162,6 +161,12 @@ namespace Code.Presentation
 
         private void UpdateScoreViewVisibility() =>
             _scoreView.gameObject.SetActive(_gameManager.CurrentGameSession != null);
+
+        private void UpdateScoreView()
+        {
+            _scoreView.UpdateTurnsCount(_gameManager.CurrentGameSession.Turns);
+            _scoreView.UpdateMatchesCount(_gameManager.CurrentGameSession.Matches);
+        }
 
         private void OnCardClicked(BoardLocation boardLocation)
         {

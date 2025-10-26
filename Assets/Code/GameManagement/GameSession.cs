@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Code.GameManagement.Serialization;
 using Code.State;
-using Code.State.Serialization;
 using UnityEngine;
 
 namespace Code.GameManagement
@@ -28,19 +28,19 @@ namespace Code.GameManagement
         /// Declaring the global serialization strategy.
         /// NOTE that serialization strategy has to be stateless.
         /// </summary>
-        private static readonly IBoardSerializationStrategy serializationStrategy =
-            new DefaultBoardSerializationStrategy();
-        
+        private static readonly ISessionSerializationStrategy serializationStrategy =
+            new DefaultSessionSerializationStrategy();
+
         /// <summary>
         /// Called when the game is started.
         /// </summary>
         public event Action Started = delegate { };
-        
+
         /// <summary>
         /// Invokes when used turn is started.
         /// </summary>
         public event Action TurnStarted = delegate { };
-        
+
         /// <summary>
         /// Invokes when used turn is finished.
         /// Bool represents whether it was a match or not.
@@ -75,7 +75,7 @@ namespace Code.GameManagement
         /// <summary>
         /// A total session time in seconds.
         /// </summary>
-        public float SessionTime { get; private set; }
+        public float Time { get; private set; }
 
         public bool AllowToMakeTurn => Mathf.Approximately(_startTimout, 0f);
 
@@ -139,24 +139,17 @@ namespace Code.GameManagement
         }
 
         /// <summary>
-        /// Initialize a new game session from the binary blob using <see cref="IBoardSerializationStrategy"/> implementation.
+        /// Initialize a new game session from the binary blob using <see cref="ISessionSerializationStrategy"/> implementation.
         /// </summary>
         internal GameSession(byte[] bytes, float startTimout = 0f)
         {
             _startTimout = Mathf.Max(startTimout, 0f);
 
-            // TODO: Should also serialize turns and matches.
-            _boardState = serializationStrategy.Deserialize(bytes);
-        }
-
-        /// <summary>
-        /// Initialize a new game session with an explicit state.
-        /// </summary>
-        internal GameSession(int turns, int matches, BoardState boardState)
-        {
-            Turns = turns;
-            Matches = matches;
-            _boardState = boardState;
+            var sessionState = serializationStrategy.Deserialize(bytes);
+            Turns = sessionState.Turns;
+            Matches = sessionState.Matches;
+            Time = sessionState.Time;
+            _boardState = sessionState.BoardState;
         }
 
         /// <summary>
@@ -170,7 +163,7 @@ namespace Code.GameManagement
                 Debug.LogError($"Unable to make a move yet, current timeout is '{_startTimout}'.");
                 return;
             }
-            
+
             ref var desiredState = ref GetState(inputLocation.Row, inputLocation.Column);
             if (desiredState.IsResolved)
             {
@@ -205,7 +198,7 @@ namespace Code.GameManagement
                     // Reset the current selected location before next move.
                     _currentSelectedLocation = null;
 
-                    var isMatch = state0.Type == state1.Type; 
+                    var isMatch = state0.Type == state1.Type;
                     // Check if matched.
                     if (isMatch)
                     {
@@ -250,7 +243,7 @@ namespace Code.GameManagement
             }
             else
             {
-                SessionTime += deltaTime;
+                Time += deltaTime;
             }
         }
 
@@ -258,10 +251,10 @@ namespace Code.GameManagement
             ref _boardState.GetStateRef(row, column);
 
         /// <summary>
-        /// Saves the session sate as binary blob, using see <see cref="IBoardSerializationStrategy"/> implmenetation.
+        /// Saves the session sate as binary blob, using see <see cref="ISessionSerializationStrategy"/> implmenetation.
         /// </summary>
         /// <returns></returns>
         public byte[] Serialize() =>
-            serializationStrategy.Serialize(_boardState);
+            serializationStrategy.Serialize(session: this);
     }
 }

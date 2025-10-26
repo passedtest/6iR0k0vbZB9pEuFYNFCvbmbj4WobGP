@@ -46,6 +46,8 @@ namespace Code.Presentation
                     return;
                 }
 
+                GUILayout.Label($"Turns: {_gameManager.CurrentGameSession.Turns}, Matches: {_gameManager.CurrentGameSession.Matches}");
+
                 GUILayout.BeginHorizontal();
                 for (var column = 0; column < _gameManager.CurrentGameSession.Columns; column++)
                 {

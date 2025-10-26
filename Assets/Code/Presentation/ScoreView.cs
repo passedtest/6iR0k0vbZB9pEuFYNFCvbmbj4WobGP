@@ -17,17 +17,11 @@ namespace Code.Presentation
             _turnsTextPattern = _turnsText.text;
             _matchesTextPattern = _matchesText.text;
         }
-        
+
         internal void UpdateTurnsCount(int value) =>
             _turnsText.text = string.Format(_turnsTextPattern, value);
-        
+
         internal void UpdateMatchesCount(int value) =>
             _matchesText.text = string.Format(_matchesTextPattern, value);
-
-        internal void ResetState()
-        {
-            UpdateTurnsCount(0);
-            UpdateMatchesCount(0);
-        }
     }
 }
