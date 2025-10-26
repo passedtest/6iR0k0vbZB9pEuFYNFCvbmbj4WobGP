@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Code.GameManagement;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,12 +8,6 @@ namespace Code.Presentation
     [DisallowMultipleComponent]
     public sealed class GameViewController : MonoBehaviour
     {
-        private struct DelayedDisabledCard
-        {
-            internal BoardLocation Location;
-            internal float Time;
-        }
-
         [SerializeField] private Button _startStopButton;
         [SerializeField] private Button _saveButton;
         [SerializeField] private Button _loadButton;
@@ -28,8 +21,6 @@ namespace Code.Presentation
 
         private GameManager _gameManager;
         private PrototypePresentationDrawer _presentationDrawer;
-        private readonly Queue<BoardLocation> _currentTurnClickedCards = new();
-        private readonly List<DelayedDisabledCard> _delayedDisabledCards = new();
 
         /// <summary>
         /// Will be called from bootstrap
@@ -61,23 +52,6 @@ namespace Code.Presentation
             UpdateScoreViewVisibility();
         }
 
-        private void OnStartStopButtonPressed()
-        {
-            if (_gameManager.CurrentGameSession == null)
-                _gameManager.StartOrRestartGame(rows: 5, columns: 6);
-            else
-                _gameManager.TryStopCurrentSession();
-        }
-
-        private void OnSaveButtonPressed() =>
-            _gameManager.TrySaveCurrentSession();
-
-        private void OnLoadButtonPressed() =>
-            _gameManager.TryLoadSessionFromSaveData();
-
-        private void OnSessionSaved() =>
-            _loadButton.interactable = true;
-
         private void OnSessionInitialized()
         {
             UpdateStartStopButtonText();
@@ -89,6 +63,7 @@ namespace Code.Presentation
             session.TurnStarted += OnTurnStarted;
             session.TurnFinished += OnTurnFinished;
             session.CellResolved += OnCurrentSessionCellResolved;
+            session.InputAccepted += OnInputAccepted;
 
             _gameBoardView.InitializeSession(session);
             UpdateScoreView();
@@ -103,6 +78,26 @@ namespace Code.Presentation
             _gameBoardView.TryReleaseSession();
         }
 
+        private void OnSessionSaved() =>
+            _loadButton.interactable = true;
+
+        private void OnCardClicked(BoardLocation boardLocation) =>
+            _gameManager.CurrentGameSession.OnInput(boardLocation);
+
+        private void OnStartStopButtonPressed()
+        {
+            if (_gameManager.CurrentGameSession == null)
+                _gameManager.StartOrRestartGame(rows: 5, columns: 6);
+            else
+                _gameManager.TryStopCurrentSession();
+        }
+
+        private void OnSaveButtonPressed() =>
+            _gameManager.TrySaveCurrentSession();
+
+        private void OnLoadButtonPressed() =>
+            _gameManager.TryLoadSessionFromSaveData();
+
         private void OnSessionStarted()
         {
             _gameBoardView.OnSessionStarted();
@@ -111,46 +106,20 @@ namespace Code.Presentation
         private void OnTurnFinished(bool isMatch)
         {
             UpdateScoreView();
-
-            while (_currentTurnClickedCards.TryDequeue(out var boardLocation))
-            {
-                var state = _gameManager.CurrentGameSession.GetState(boardLocation.Row, boardLocation.Column);
-                if (!state.IsResolved)
-                    _delayedDisabledCards.Add(new DelayedDisabledCard() { Location = boardLocation, Time = 1f });
-            }
+            _gameBoardView.OnTurnFinished(isMatch);
         }
 
-        private void OnTurnStarted()
-        {
-            foreach (var delayedDisabledCard in _delayedDisabledCards)
-                _gameBoardView.SetVisible(delayedDisabledCard.Location, false);
-
-            _delayedDisabledCards.Clear();
-        }
-
-        private void Update()
-        {
-            for (var i = _delayedDisabledCards.Count - 1; i >= 0; i--)
-            {
-                var delayedDisabledCard = _delayedDisabledCards[i];
-                delayedDisabledCard.Time -= Time.deltaTime;
-                if (delayedDisabledCard.Time <= 0)
-                {
-                    _gameBoardView.SetVisible(delayedDisabledCard.Location, false);
-                    _delayedDisabledCards.RemoveAt(i);
-                }
-                else
-                {
-                    _delayedDisabledCards[i] = delayedDisabledCard;
-                }
-            }
-        }
+        private void OnTurnStarted() =>
+            _gameBoardView.OnTurnStarted();
 
         private void OnCurrentSessionCellResolved(BoardLocation boardLocation)
         {
-            _gameBoardView.SetVisible(boardLocation, true);
-            _gameBoardView.SetInteractable(boardLocation, false);
+            _gameBoardView.SetCardVisible(boardLocation, true);
+            _gameBoardView.SetCardInteractable(boardLocation, false);
         }
+
+        private void OnInputAccepted(BoardLocation boardLocation) =>
+            _gameBoardView.HandleInput(boardLocation);
 
         private void UpdateStartStopButtonText() =>
             _startStopButton.GetComponentInChildren<Text>().text =
@@ -166,13 +135,8 @@ namespace Code.Presentation
         {
             _scoreView.UpdateTurnsCount(_gameManager.CurrentGameSession.Turns);
             _scoreView.UpdateMatchesCount(_gameManager.CurrentGameSession.Matches);
-        }
-
-        private void OnCardClicked(BoardLocation boardLocation)
-        {
-            _currentTurnClickedCards.Enqueue(boardLocation);
-            _gameBoardView.SetVisible(boardLocation, true);
-            _gameManager.CurrentGameSession.OnInput(boardLocation);
+            // Time should be updated via reactive property.
+            _scoreView.UpdateTime(_gameManager.CurrentGameSession.Time);
         }
 
         private void OnGUI() =>

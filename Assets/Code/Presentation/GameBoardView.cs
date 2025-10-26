@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Code.GameManagement;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,12 @@ namespace Code.Presentation
     [DisallowMultipleComponent]
     public sealed class GameBoardView : GridLayoutGroup
     {
+        private struct CardDisableRequest
+        {
+            internal BoardLocation Location;
+            internal float Time;
+        }
+
         public event Action<BoardLocation> CardClicked = delegate { };
 
         [SerializeField] private int _rows;
@@ -20,6 +27,9 @@ namespace Code.Presentation
         private CardViewPool _cardViewViewPool;
         private CellsVisualData _visualData;
         private CardView[,] _cardInstances;
+
+        private readonly Queue<BoardLocation> _currentTurnClickedCards = new();
+        private readonly List<CardDisableRequest> _delayedDisabledCards = new();
 
         protected override void Awake()
         {
@@ -65,15 +75,45 @@ namespace Code.Presentation
                 {
                     var state = _gameSession.GetState(row, column);
                     var cardViewInstance = _cardInstances[row, column];
-                    
+
                     cardViewInstance.SetVisible(state.IsResolved);
                     cardViewInstance.SetInteractable(!state.IsResolved);
                 }
             }
         }
 
+        internal void HandleInput(BoardLocation boardLocation)
+        {
+            _currentTurnClickedCards.Enqueue(boardLocation);
+            SetCardVisible(boardLocation, value: true);
+        }
+
         private void OnCardClicked(BoardLocation boardLocation) =>
             CardClicked(boardLocation);
+
+        internal void OnTurnStarted()
+        {
+            foreach (var delayedDisabledCard in _delayedDisabledCards)
+                SetCardVisible(delayedDisabledCard.Location, false);
+
+            _delayedDisabledCards.Clear();
+        }
+
+        internal void OnTurnFinished(bool isMatch)
+        {
+            if (isMatch)
+            {
+                _currentTurnClickedCards.Clear();
+                return;
+            }
+
+            while (_currentTurnClickedCards.TryDequeue(out var boardLocation))
+                _delayedDisabledCards.Add(new CardDisableRequest
+                {
+                    Location = boardLocation,
+                    Time = 1f
+                });
+        }
 
         internal void TryReleaseSession()
         {
@@ -86,16 +126,32 @@ namespace Code.Presentation
             _cardInstances = null;
         }
 
-        internal void SetVisible(BoardLocation boardLocation, bool value)
+        internal void SetCardVisible(BoardLocation boardLocation, bool value)
         {
             ref var cardView = ref _cardInstances[boardLocation.Row, boardLocation.Column];
             cardView.SetVisible(value);
         }
-        
-        internal void SetInteractable(BoardLocation boardLocation, bool value)
+
+        internal void SetCardInteractable(BoardLocation boardLocation, bool value)
         {
             ref var cardView = ref _cardInstances[boardLocation.Row, boardLocation.Column];
             cardView.SetInteractable(value);
+        }
+
+        private void Update()
+        {
+            for (var i = _delayedDisabledCards.Count - 1; i >= 0; i--)
+            {
+                var delayedDisabledCard = _delayedDisabledCards[i];
+                delayedDisabledCard.Time -= Time.deltaTime;
+                if (delayedDisabledCard.Time <= 0)
+                {
+                    SetCardVisible(delayedDisabledCard.Location, false);
+                    _delayedDisabledCards.RemoveAt(i);
+                }
+                else
+                    _delayedDisabledCards[i] = delayedDisabledCard;
+            }
         }
 
         public override void SetLayoutVertical()

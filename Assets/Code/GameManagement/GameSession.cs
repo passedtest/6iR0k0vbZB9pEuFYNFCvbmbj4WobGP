@@ -48,6 +48,16 @@ namespace Code.GameManagement
         public event Action<bool> TurnFinished = delegate { };
 
         /// <summary>
+        /// Called if the input passed to <see cref="OnInput"/> is correct.
+        /// </summary>
+        public event Action<BoardLocation> InputAccepted = delegate { };
+
+        /// <summary>
+        /// Called when all the cells are resolved.
+        /// </summary>
+        public event Action Finished = delegate { };
+
+        /// <summary>
         /// Invokes when the specific cell was resolved.
         /// </summary>
         public event Action<BoardLocation> CellResolved = delegate { };
@@ -77,8 +87,9 @@ namespace Code.GameManagement
         /// </summary>
         public float Time { get; private set; }
 
-        public bool AllowToMakeTurn => Mathf.Approximately(_startTimout, 0f);
-
+        /// <summary>
+        /// A time, before game starts. UI systems has to ensure that board is visible during this period.
+        /// </summary>
         private float _startTimout;
 
         private readonly BoardState _boardState;
@@ -158,7 +169,8 @@ namespace Code.GameManagement
         /// <param name="inputLocation"></param>
         public void OnInput(in BoardLocation inputLocation)
         {
-            if (!AllowToMakeTurn)
+            // Game is not started yet.
+            if (_startTimout > 0f)
             {
                 Debug.LogError($"Unable to make a move yet, current timeout is '{_startTimout}'.");
                 return;
@@ -171,6 +183,15 @@ namespace Code.GameManagement
                 return;
             }
 
+            if (_currentSelectedLocation != null && _currentSelectedLocation.Value.Equals(inputLocation))
+            {
+                // This is just a sanity check. This should never happen as UI should handle interactivity.
+                Debug.LogError($"Unable to select the location of '{inputLocation}' as its already selected.");
+                return;
+            }
+
+            InputAccepted(inputLocation);
+
             if (_currentSelectedLocation == null)
             {
                 // Handle 1st move input.
@@ -179,54 +200,42 @@ namespace Code.GameManagement
             }
             else
             {
-                if (_currentSelectedLocation.Value.Equals(inputLocation))
+                Turns++;
+
+                // Now, when the second location received, we could check if cards are matched.
+                var location0 = _currentSelectedLocation.Value;
+                var location1 = inputLocation;
+
+                ref var state0 = ref GetState(location0.Row, location0.Column);
+                ref var state1 = ref GetState(location1.Row, location1.Column);
+
+                // Reset the current selected location before next move.
+                _currentSelectedLocation = null;
+
+                var gameFinished = false;
+                var isMatch = state0.Type == state1.Type;
+                // Check if matched.
+                if (isMatch)
                 {
-                    // This is just a sanity check. This should never happen as UI should handle interactivity.
-                    Debug.LogError($"Unable to select the location of '{inputLocation}' as its already selected.");
+                    // Match!
+                    Matches++;
+
+                    // Mark state as resolved, and invoke the events.
+                    state0.IsResolved = true;
+                    CellResolved(location0);
+
+                    state1.IsResolved = true;
+                    CellResolved(location1);
+
+                    if (Matches == _boardState.Columns * _boardState.Rows / 2)
+                        gameFinished = true;
                 }
-                else
-                {
-                    Turns++;
 
-                    // Now, when the second location received, we could check if cards are matched.
-                    var location0 = _currentSelectedLocation.Value;
-                    var location1 = inputLocation;
+                // State was changed (not necessary a match).
+                TurnFinished(isMatch);
 
-                    ref var state0 = ref GetState(location0.Row, location0.Column);
-                    ref var state1 = ref GetState(location1.Row, location1.Column);
-
-                    // Reset the current selected location before next move.
-                    _currentSelectedLocation = null;
-
-                    var isMatch = state0.Type == state1.Type;
-                    // Check if matched.
-                    if (isMatch)
-                    {
-                        // Match!
-                        Matches++;
-
-                        // Mark state as resolved, and invoke the events.
-                        state0.IsResolved = true;
-                        CellResolved(location0);
-
-                        state1.IsResolved = true;
-                        CellResolved(location1);
-
-                        Debug.Log("ITS A MATCH");
-
-                        if (Matches == _boardState.Columns * _boardState.Rows / 2)
-                        {
-                            Debug.Log("GAME WON");
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError("NOT A MATCH :(");
-                    }
-
-                    // State was changed (not necessary a match).
-                    TurnFinished(isMatch);
-                }
+                if (gameFinished)
+                    Finished();
             }
         }
 
@@ -242,9 +251,7 @@ namespace Code.GameManagement
                 }
             }
             else
-            {
                 Time += deltaTime;
-            }
         }
 
         public ref BoardCellState GetState(int row, int column) =>

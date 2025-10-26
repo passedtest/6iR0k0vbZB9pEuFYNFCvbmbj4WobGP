@@ -9,7 +9,6 @@ namespace Code.Presentation
     internal sealed class PrototypePresentationDrawer
     {
         private readonly GameManager _gameManager;
-        private byte[] _currentSavedSessionBlob;
 
         public PrototypePresentationDrawer(GameManager gameManager)
         {
@@ -21,22 +20,16 @@ namespace Code.Presentation
             if (_gameManager.CurrentGameSession != null)
             {
                 if (GUILayout.Button("Save"))
-                {
-                    _currentSavedSessionBlob = _gameManager.CurrentGameSession.Serialize();
-                }
+                    _gameManager.TrySaveCurrentSession();
             }
 
-            if (_currentSavedSessionBlob != null && GUILayout.Button("Load"))
-            {
-                _gameManager.StartOrRestartGame(_currentSavedSessionBlob);
-            }
+            if (GUILayout.Button("Load"))
+                _gameManager.TryLoadSessionFromSaveData();
 
             if (_gameManager.CurrentGameSession == null)
             {
                 if (GUILayout.Button("Start"))
-                {
                     _gameManager.StartOrRestartGame(rows: 5, columns: 6);
-                }
             }
             else
             {
