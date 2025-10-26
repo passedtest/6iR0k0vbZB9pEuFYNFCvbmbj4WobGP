@@ -16,7 +16,7 @@ namespace Code.Presentation
         }
 
         public event Action<BoardLocation> CardClicked = delegate { };
-        
+
         [SerializeField] private int _layoutColumns = 1;
 
         [SerializeField] private RectTransform _rectTransform;

@@ -8,12 +8,12 @@ namespace Code.Presentation
     [DisallowMultipleComponent]
     public sealed class GameViewController : MonoBehaviour
     {
-        [SerializeField, Range(GameSession.MIN_ROWS, GameSession.MAX_ROWS)] 
+        [SerializeField, Range(GameSession.MIN_ROWS, GameSession.MAX_ROWS)]
         private byte _desiredRows = 5;
-        
-        [SerializeField, Range(GameSession.MIN_COLUMNS, GameSession.MAX_COLUMNS)] 
+
+        [SerializeField, Range(GameSession.MIN_COLUMNS, GameSession.MAX_COLUMNS)]
         private byte _desiredColumns = 6;
-        
+
         [SerializeField] private Button _startStopButton;
         [SerializeField] private Button _saveButton;
         [SerializeField] private Button _loadButton;

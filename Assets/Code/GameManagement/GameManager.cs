@@ -9,13 +9,13 @@ namespace Code.GameManagement
     public sealed class GameManager
     {
         private const float DEFAULT_START_TIMEOUT = 3f;
-        
+
         public event Action SessionInitialized = delegate { };
         public event Action SessionReleased = delegate { };
         public event Action SessionSaved = delegate { };
-        
+
         public GameSession CurrentGameSession { get; private set; }
-        
+
         private byte[] _lastSessionSerializedData;
 
         public void StartOrRestartGame(int rows, int columns)
@@ -34,13 +34,13 @@ namespace Code.GameManagement
 
         public void TrySaveCurrentSession()
         {
-            if (CurrentGameSession == null) 
+            if (CurrentGameSession == null)
                 return;
-            
+
             _lastSessionSerializedData = CurrentGameSession.Serialize();
             SessionSaved();
         }
-        
+
         public void TryLoadSessionFromSaveData()
         {
             if (_lastSessionSerializedData != null)

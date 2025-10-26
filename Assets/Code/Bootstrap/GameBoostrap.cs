@@ -23,7 +23,7 @@ namespace Code.Bootstrap
             var gameViewController = Instantiate(_gameViewControllerPrefab);
             gameViewController.Initialize(_gameManager);
         }
-        
+
         private void Update()
         {
             _gameManager.Update(Time.deltaTime);

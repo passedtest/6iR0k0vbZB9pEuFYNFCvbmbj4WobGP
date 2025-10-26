@@ -26,7 +26,7 @@ namespace Code.Presentation
 
         internal void UpdateMatchesCount(int value) =>
             _matchesText.text = string.Format(_matchesTextPattern, value);
-        
+
         internal void UpdateTime(float value) =>
             _timeText.text = string.Format(_timeTextPattern, value.ToString(format: "f0"));
     }
