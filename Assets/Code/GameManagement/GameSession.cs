@@ -30,6 +30,16 @@ namespace Code.GameManagement
         /// </summary>
         private static readonly IBoardSerializationStrategy serializationStrategy =
             new DefaultBoardSerializationStrategy();
+        
+        /// <summary>
+        /// Invokes when used turn is finished.
+        /// </summary>
+        public event Action TurnFinished = delegate { };
+        
+        /// <summary>
+        /// Invokes when the specific cell was resolved.
+        /// </summary>
+        public event Action<BoardLocation> CellResolved = delegate { };
 
         /// <summary>
         /// Current board rows.
@@ -40,6 +50,16 @@ namespace Code.GameManagement
         /// Current board columns.
         /// </summary>
         public int Columns => _boardState.Columns;
+        
+        /// <summary>
+        /// An amount of turns user has been done so far.
+        /// </summary>
+        public int Turns { get; private set; }
+        
+        /// <summary>
+        /// Amount of matches.
+        /// </summary>
+        public int Matches { get; private set; }
 
         private readonly BoardState _boardState;
         private BoardLocation? _currentSelectedLocation;
@@ -72,7 +92,7 @@ namespace Code.GameManagement
                 allValues.Add(stateTypeIndex);
             }
 
-            // Shuffle all the car states.
+            // Shuffle all the card states.
             var cnt = allValues.Count;
             while (cnt > 1)
             {
@@ -99,56 +119,81 @@ namespace Code.GameManagement
         /// <summary>
         /// Initialize a new game session from the binary blob using <see cref="IBoardSerializationStrategy"/> implementation.
         /// </summary>
-        internal GameSession(byte[] bytes) =>
+        internal GameSession(byte[] bytes)
+        {
+            // TODO: Should also serialize turns and matches.
             _boardState = serializationStrategy.Deserialize(bytes);
+        }
+        
+        /// <summary>
+        /// Initialize a new game session with an explicit state.
+        /// </summary>
+        internal GameSession(int turns, int matches, BoardState boardState)
+        {
+            Turns = turns;
+            Matches = matches;
+            _boardState = boardState;
+        }
 
         /// <summary>
         /// This basically represent the user input from the UI.
         /// </summary>
-        /// <param name="externalInput"></param>
-        public void OnInput(in BoardLocation externalInput)
+        /// <param name="inputLocation"></param>
+        public void OnInput(in BoardLocation inputLocation)
         {
             if (_currentSelectedLocation == null)
             {
                 // Handle 1st move input.
-                _currentSelectedLocation = externalInput;
+                _currentSelectedLocation = inputLocation;
             }
             else
             {
-                if (_currentSelectedLocation.Value.Equals(externalInput))
+                if (_currentSelectedLocation.Value.Equals(inputLocation))
                 {
                     // This is just a sanity check. This should never happen as UI should handle interactivity.
-                    Debug.LogError($"Unable to select the location of '{externalInput}' as its already selected.");
+                    Debug.LogError($"Unable to select the location of '{inputLocation}' as its already selected.");
                 }
                 else
                 {
+                    Turns++;
+                    
                     // Now, when the second location received, we could check if cards are matched.
-                    var input0 = _currentSelectedLocation.Value;
-                    var input1 = externalInput;
+                    var location0 = _currentSelectedLocation.Value;
+                    var location1 = inputLocation;
 
-                    ref var state0 = ref GetState(input0.Row, input0.Column);
-                    ref var state1 = ref GetState(input1.Row, input1.Column);
+                    ref var state0 = ref GetState(location0.Row, location0.Column);
+                    ref var state1 = ref GetState(location1.Row, location1.Column);
+
+                    // Reset the current selected location before next move.
+                    _currentSelectedLocation = null;
 
                     // Check if matched.
                     if (state0.Type == state1.Type)
                     {
                         // Match!
+                        Matches++;
 
-                        // Mark state as resolved.
+                        // Mark state as resolved, and invoke the events.
                         state0.IsResolved = true;
+                        CellResolved(location0);
+                        
                         state1.IsResolved = true;
-
-                        // TODO: implement OnCellResolved event.
-                        // TODO: implement score system.
-
+                        CellResolved(location1);
+                        
                         Debug.Log("ITS A MATCH");
+
+                        if (Matches == _boardState.Columns * _boardState.Rows / 2)
+                        {
+                            Debug.Log("GAME WON");
+                        }
                     }
                     else
                     {
                         Debug.LogError("NOT A MATCH :(");
                     }
 
-                    _currentSelectedLocation = null;
+                    // State was changed (not necessary a match).
+                    TurnFinished();
                 }
             }
         }

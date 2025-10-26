@@ -42,7 +42,7 @@ namespace Code.Presentation
             {
                 if (GUILayout.Button("Stop"))
                 {
-                    _gameManager.StopGame();
+                    _gameManager.TryStopCurrentSession();
                     return;
                 }
                 

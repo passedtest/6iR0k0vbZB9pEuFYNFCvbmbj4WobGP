@@ -1,25 +1,20 @@
 using System;
 using Code.GameManagement;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace Code.Presentation
 {
     [DisallowMultipleComponent]
     public sealed class GameViewController : MonoBehaviour
     {
-        [SerializeField]
-        private GameFieldInitializer _gameFieldInitializer;
-        
-        [SerializeField]
-        private CellsVisualData _visualData;
-        
-        [SerializeField]
-        private Card _cardPrefab;
-        
+        [SerializeField] private GameBoardView _gameBoardView;
+
+        [SerializeField] private CellsVisualData _visualData;
+
+        [SerializeField] private Card _cardPrefab;
+
         private GameManager _gameManager;
         private PrototypePresentationDrawer _presentationDrawer;
-        private ObjectPool<Card> _cardPool;
 
         /// <summary>
         /// Will be called from bootstrap
@@ -31,53 +26,43 @@ namespace Code.Presentation
 
             _gameManager = gameManager;
             _gameManager.SessionStarted += OnSessionStarted;
+            _gameManager.SessionStopped += OnSessionStopped;
+
+            _gameBoardView.Initialize(_cardPrefab, _visualData);
+            _gameBoardView.CardClicked += OnCardClicked;
+            
             _presentationDrawer = new PrototypePresentationDrawer(_gameManager);
-            _cardPool = new ObjectPool<Card>(CreateCard, actionOnRelease: OnCardRelease, actionOnGet: OnGetCard, defaultCapacity: 15);
         }
 
-        private void OnCardRelease(Card card)
-        {
-            card.transform.SetParent(null, worldPositionStays: false);
-            card.gameObject.SetActive(false);
-        }
-
-        private Card CreateCard()
-        {
-            var card = Instantiate(_cardPrefab);
-            card.gameObject.SetActive(false);
-            return card;
-        }
-        
-        private void OnGetCard(Card card)
-        {
-            card.transform.SetParent(_gameFieldInitializer.transform, worldPositionStays: false);
-            card.gameObject.SetActive(true);
-        }
-        
         private void OnSessionStarted()
         {
             var session = _gameManager.CurrentGameSession;
-            foreach (var card in _gameFieldInitializer.GetComponentsInChildren<Card>())
-            {
-                _cardPool.Release(card);
-            }
-            
-            _gameFieldInitializer.Init(rows: session.Rows, columns: session.Columns);
+            session.TurnFinished += OnTurnFinished;
+            session.CellResolved += OnCurrentSessionCellResolved;
 
-            for (var row = 0; row < session.Rows; row++)
-            {
-                for (var column = 0; column < session.Columns; column++)
-                {
-                    var state = session.GetState(row, column);
-                    var c = _cardPool.Get();
-                    c.Init(_visualData.CellVisualData[state.Type]);
-                }
-            }
+            _gameBoardView.InitializeSession(session);
         }
 
-        private void OnGUI()
+        private void OnTurnFinished()
         {
-            _presentationDrawer.OnGUI();
         }
+
+        private void OnCurrentSessionCellResolved(BoardLocation boardLocation)
+        {
+            _gameBoardView.UpdateCardState(boardLocation);
+        }
+
+        private void OnSessionStopped()
+        {
+            _gameBoardView.TryReleaseSession();
+        }
+
+        private void OnCardClicked(BoardLocation boardLocation)
+        {
+            _gameManager.CurrentGameSession.OnInput(boardLocation);
+        }
+
+        private void OnGUI() =>
+            _presentationDrawer.OnGUI();
     }
 }

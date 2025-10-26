@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 25230699977566591}
   - component: {fileID: 2005513156350328876}
   m_Layer: 0
-  m_Name: GameField
+  m_Name: GameBoardView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_ChildAlignment: 5
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 206.66667, y: 206.66667}
+  m_CellSize: {x: 146.77177, y: 146.77177}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 5
@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c99dbe3ecbf147bf9ecdc5a9e35e9a39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameFieldInitializer: {fileID: 2005513156350328876}
+  _gameBoardView: {fileID: 2005513156350328876}
   _visualData: {fileID: 11400000, guid: ffdc3294da0574f529023bc964a9b494, type: 2}
   _cardPrefab: {fileID: -2620723666415647464, guid: f92a2f8f3a06145038104a29afc6eab4, type: 3}
 --- !u!223 &2197549522376446360
@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 707553825433287999}
   - component: {fileID: 681930182527012928}
   m_Layer: 0
-  m_Name: GameFieldRoot
+  m_Name: GameBoardViewFitter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

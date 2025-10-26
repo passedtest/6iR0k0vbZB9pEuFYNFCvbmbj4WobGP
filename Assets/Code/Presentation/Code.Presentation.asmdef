@@ -1,6 +1,6 @@
 {
     "name": "Code.Presentation",
-    "rootNamespace": "Code.Presentation",
+    "rootNamespace": "",
     "references": [
         "GUID:363352e1557e340619cad4cdcde539b8",
         "GUID:8807d9dd76a3947beb4104490a889e11"

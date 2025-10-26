@@ -1,12 +1,12 @@
 {
     "name": "Code.GameManagement",
-    "rootNamespace": "Code.GameManagement",
+    "rootNamespace": "",
     "references": [
         "GUID:8807d9dd76a3947beb4104490a889e11"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
